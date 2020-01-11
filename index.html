@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta charset="utf-8" />
+    <title></title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@nutui/nutui@2.1.8/dist/nutui.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1604927_ndko80d4fkg.css"/>
+    <style type="text/css">
+        html, body, #app {
+            margin:0;
+            padding:0;
+            width:100%;
+            height:100%;
+        }
+        #app {
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /*移动端滑动容器*/
+        }
+        .day {
+        
+        }
+        .day-title {
+            padding:10px;
+            padding-left: 5%;
+            color: darkblue;
+            text-shadow: 0.3px 0.3px 0px black;
+        }
+        .time-list {
+        }
+        .time-item {
+            width: 90%;
+            margin-left: 5%;
+            background-color: #F7F6F5;
+            border-radius: 10px;
+            position: relative;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border: 1px solid #CCC;
+            margin-bottom: 5px;
+        }
+        .item-name {
+            text-shadow: 0.3px 0.3px 0px black;
+            width:60px;
+            position:absolute;
+            left:10px;
+            top:10px;
+        }
+        .item-desc {
+            margin-left: 70px;
+            display: flex;
+        }
+        .item-link {
+            margin-left: 70px;
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .item-link a{
+            color:darkblue;
+        }
+        .item-pics {
+            margin-left: 70px;
+        }
+            .item-pics img {
+                margin-top:5px;
+                width:90%;
+            }
+        .iconfont {
+            color: #0094ff;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="day" v-for="day in tripdata">
+            <div class="day-title">{{day.day}} {{day.title}}</div>
+            <div class="time-list">
+                <div class="time-item" v-for="item in day.list">
+                    <div class="item-name">{{item.time}}</div>
+                    <div class="item-desc">
+                        <i v-if="item.type" class="iconfont" :class="getclass(item)"></i>
+                    {{item.desc}}
+                    </div>
+                    <div class="item-link">
+                        <i v-if="item.pos" class="iconfont icondingwei"></i>
+                        <a v-if="item.pos" target="_blank" :href="item.pos">定位</a>
+                        <i v-if="item.link&&item.isdplink" class="iconfont iconchangyonglogo42"></i>
+                        <i v-else-if="item.link" class="iconfont iconguizeshuoming"></i>
+                        <a v-if="item.link" target="_blank" :href="item.link">
+                            <template v-if="item.isdplink">
+                                打开大众点评
+                            </template>
+                            <template v-else>
+                                查看详细
+                            </template>
+                        </a>
+                    </div>
+                    <div class="item-pics">
+                        <img @click="showimg(pic)" v-for="pic in item.pics" :src="pic" class="pic"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- 引入Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://cdn.jsdelivr.net/npm/@nutui/nutui@2.1.8/dist/nutui.min.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    tripdata: [
+                        {
+                            day: "2020-1-21",
+                            title: "武汉->广州",
+                            list: [
+                                {
+                                    type: "iconditie",
+                                    time: "16:30",
+                                    desc: "出发前往天河机场",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconfeiji",
+                                    time: "19:35",
+                                    desc: "【交通：飞机】乘坐 CA8249 飞广州",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "21:25",
+                                    desc: "抵达白云机场",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type:"iconditie",
+                                    time: "21:40",
+                                    desc: "地铁3号线北延段 → 地铁3号线 珠江新城站 （B2口出）",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "22:45",
+                                    desc: "入住 朵亚连锁酒店公寓(广州珠江新城美国领事馆店)",
+                                    link: "https://m.ctrip.com/webapp/schedule/newsharesecond.html?ishideheader=yes&isHideNavBar=YES&autoawaken=close&popup=close&smartTripIds=1724615423",
+                                    pos:"https://j.map.baidu.com/ca/BB",
+                                    pics: null
+                                }
+                            ]
+                        },
+                        {
+                            day: "2020-1-22",
+                            title: "广州->珠海",
+                            list: [
+                                {
+                                    type: "",
+                                    time: "7:30",
+                                    desc: "起床",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconicon-",
+                                    time: "8:00",
+                                    desc: "提前半小时抵达美国领事馆，准备面签",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconicon-",
+                                    time: "8:30",
+                                    desc: "开始面签",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "9:00",
+                                    desc: "早餐:银记肠粉",
+                                    pos: "https://j.map.baidu.com/55/zit",
+                                    link: "http://m.dianping.com/appshare/shop/59422750",
+                                    pics: null,
+                                    isdplink:true
+                                },
+                                {
+                                    type: "iconjingdian",
+                                    time: "10:00",
+                                    desc: "广东省博物馆",
+                                    pos: "",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "12:00",
+                                    desc: "午餐：点都德(花城店)",
+                                    pos: "https://j.map.baidu.com/57/T",
+                                    link: "http://m.dianping.com/appshare/shop/56985236",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconjingdian",
+                                    time: "13:30",
+                                    desc: "地铁到广州塔 乘坐广州有轨电车游览珠江",
+                                    pos: "",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "16:00",
+                                    desc: "晚餐：陶陶居(丽影广场店)",
+                                    pos: "https://j.map.baidu.com/32/igJ",
+                                    link: "",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconditie",
+                                    time: "17:00",
+                                    desc: "地铁1号线（长寿路）→ 公园前站换乘 → 地铁2号线（广州南站）",
+                                    link: "",
+                                    pics: null,
+                                    pos: "https://j.map.baidu.com/da/h-l"
+                                },
+                                {
+                                    type: "iconhuoche",
+                                    time: "19:06",
+                                    desc: "广州南站 乘 C7633 到珠海站 ",
+                                    link: "",
+                                    pics: null                                    
+                                },
+                                {
+                                    type: "",
+                                    time: "20:20",
+                                    desc: "抵达珠海站",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "21:00",
+                                    desc: "入住如家商旅-拱北前山轻轨站店",
+                                    link: "https://s.dfkhgj.com/E1.UkOFoo",
+                                    pos: "https://j.map.baidu.com/a2/x6u",
+                                    pics: null
+                                }
+                            ]
+                        },
+                        {
+                            day: "2020-1-23",
+                            title: "珠海长隆",
+                            list: [
+                                {
+                                    type: "",
+                                    time: "7:00",
+                                    desc: "起床",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "8:00",
+                                    desc: "早餐：燊记食店",
+                                    pos: "https://j.map.baidu.com/a2/tbu",
+                                    link: "http://m.dianping.com/appshare/shop/13703462",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "icontaxi",
+                                    time: "08:30",
+                                    desc: "滴滴：前往长隆企鹅酒店（40分钟路程）",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "09:10",
+                                    desc: "抵达企鹅酒店办理入住和寄存行李",
+                                    link: "",
+                                    pos: "https://j.map.baidu.com/c1/V_k",
+                                    pics: ["https://cdn.chimelong.com/assets/images/pic-pc.43ea5e7.jpg"]
+                                },
+                                {
+                                    type: "iconyouleyuan",
+                                    time: "09:30",
+                                    desc: "前往长隆海洋王国,入住酒店可以9:30提前入园",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "12:00",
+                                    desc: "午餐:外卖到海洋王国或酒店",
+                                    pos: "",
+                                    link: "",
+                                    pics: null,
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "16:30",
+                                    desc: "晚餐:企鹅餐厅自助餐（想坐企鹅旁边要提前去排队）",
+                                    pos: "",
+                                    link: "",
+                                    pics: ["https://cdn.chimelong.com/assets/images/item0.2a19a3c.jpg"]
+                                },
+                                {
+                                    type: "iconyouleyuan",
+                                    time: "07:30",
+                                    desc: "前往长隆海洋王国,看烟花表演",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "21:00",
+                                    desc: "入住长隆企鹅酒店",
+                                    link: "https://s.dfkhgj.com/E1.UkOFoo",
+                                    pos: "https://j.map.baidu.com/a2/x6u",
+                                    pics: null
+                                }
+                            ]
+                        },
+                        {
+                            day: "2020-1-24",
+                            title: "珠海长隆->珠海",
+                            list: [
+                                {
+                                    type: "",
+                                    time: "8:00",
+                                    desc: "起床，叫外卖到酒店",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconyouleyuan",
+                                    time: "09:30",
+                                    desc: "前往长隆海洋王国2刷（爸爸妈妈可以在酒店休息）",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "11:45",
+                                    desc: "退房",
+                                    pos: "",
+                                    link: "",
+                                    pics: null,
+                                },
+                                {
+                                    type: "icontaxi",
+                                    time: "12:00",
+                                    desc: "滴滴：前往如家商旅-拱北前山轻轨站店",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "12:00",
+                                    desc: "午餐:“颓记”叫外卖到酒店",
+                                    pos: "",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "12:40",
+                                    desc: "入住如家商旅-拱北前山轻轨站店",
+                                    link: "https://s.dfkhgj.com/E1.UkOFoo",
+                                    pos: "https://j.map.baidu.com/a2/x6u",
+                                    pics: null
+                                },
+                                {
+                                    type: "icontaxi",
+                                    time: "13:30",
+                                    desc: "滴滴：前往情侣路-大剧院",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconyouleyuan",
+                                    time: "14:00",
+                                    desc: "游览珠海鱼女，情侣路风光，看港珠澳大桥",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "18:00",
+                                    desc: "晚餐：金满隆海味饭 / 益健美食大广场(北岭店)",
+                                    pos: "https://j.map.baidu.com/e7/dkt",
+                                    link: "http://m.dianping.com/appshare/shop/92903135",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "19:30",
+                                    desc: "回酒店 如家商旅-拱北前山轻轨站店",
+                                    link: "https://s.dfkhgj.com/E1.UkOFoo",
+                                    pos: "https://j.map.baidu.com/a2/x6u",
+                                    pics: null
+                                }
+                            ]
+                        },
+                        {
+                            day: "2020-1-25",
+                            title: "珠海->澳门",
+                            list: [
+                                {
+                                    type: "",
+                                    time: "07:00",
+                                    desc: "起床退房",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "07:30",
+                                    desc: "从拱北口岸前往澳门 过关约30分钟",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "08:00",
+                                    desc: "坐51A公交 到威尼斯人酒店",
+                                    pos: "",
+                                    link: "",
+                                    pics: null,
+                                },
+                                {
+                                    type: "",
+                                    time: "09:00",
+                                    desc: "寄存好行李 坐公交26A (排角银河站)前往 新马路永亨站",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconjingdian",
+                                    time: "09:40",
+                                    desc: "议事亭前地广场->大三巴牌坊->大炮台->澳门博物馆（边逛边吃）",
+                                    pos: "",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "12:30",
+                                    desc: "坐公交12 (水坑尾公共行政大楼站)前往 澳门文化中心站",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconjingdian",
+                                    time: "13:00",
+                                    desc: "澳门科学馆",
+                                    pos: "https://j.map.baidu.com/7e/IQu",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "15:30",
+                                    desc: "金沙坐发财车返回威尼斯人",
+                                    pos: "https://j.map.baidu.com/93/ikt",
+                                    link: "",
+                                    pics: null,
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "16:00",
+                                    desc: "入住酒店，威尼斯人晚餐+购物,威尼斯人酒店琳琅美食广场：添好运",
+                                    pos: "",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "19:30",
+                                    desc: "回酒店休息",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                }
+                            ]
+                        },
+                        {
+                            day: "2020-1-26",
+                            title: "澳门->珠海",
+                            list: [
+                                {
+                                    type: "iconcanyin",
+                                    time: "08:00",
+                                    desc: "起床 早餐:威尼斯人酒店琳琅美食广场",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "09:00",
+                                    desc: "威尼斯人酒店赌场(小孩不能进赌场需要在酒店房间休息)",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "12:00",
+                                    desc: "退房寄存行李",
+                                    pos: "",
+                                    link: "",
+                                    pics: null,
+                                },
+                                {
+                                    type: "iconjingdian",
+                                    time: "12:40",
+                                    desc: "官也街（边逛边吃）龙环葡韵住宅式博物馆、永利皇宫观光缆车",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "17:00",
+                                    desc: "回威尼斯人提行李 做发财车去拱北回珠海",
+                                    pos: "",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "18:30",
+                                    desc: "晚餐:名苑皇宫酒家",
+                                    pos: "https://j.map.baidu.com/f5/bLc",
+                                    link: "http://m.dianping.com/appshare/shop/96086665",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "20:00",
+                                    desc: "入住如家商旅-拱北前山轻轨站店",
+                                    link: "https://s.dfkhgj.com/E1.UkOFoo",
+                                    pos: "https://j.map.baidu.com/a2/x6u",
+                                    pics: null
+                                }
+                            ]
+                        },
+                        {
+                            day: "2020-1-27",
+                            title: "珠海->广州",
+                            list: [
+                                {
+                                    type: "iconcanyin",
+                                    time: "08:00",
+                                    desc: "早餐：燊记食店",
+                                    pos: "https://j.map.baidu.com/a2/tbu",
+                                    link: "http://m.dianping.com/appshare/shop/13703462",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconhuoche",
+                                    time: "10:30",
+                                    desc: "火车 C7694 前往广州",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "11:39",
+                                    desc: "抵达广州南",
+                                    pos: "",
+                                    link: "",
+                                    pics: null,
+                                },
+                                {
+                                    type: "iconditie",
+                                    time: "11:45",
+                                    desc: "地铁2号线 广州南站 → 会江站（A口出）",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "12:00",
+                                    desc: "入住丽枫广州高铁南站会江地铁站店",
+                                    link: "",
+                                    pos: "https://j.map.baidu.com/07/Zes",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconditie",
+                                    time: "12:30",
+                                    desc: "地铁2号线 会江站(嘉禾望岗方向) → 海珠广场站 → 地铁6号线（香雪方向） →北京路站 （B口出）",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "13:30",
+                                    desc: "午餐:陶陶居酒家(北京路店)",
+                                    pos: "https://j.map.baidu.com/66/pyK",
+                                    link: "http://m.dianping.com/appshare/shop/94276615",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconjingdian",
+                                    time: "15:00",
+                                    desc: "广州圣心大教堂",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconditie",
+                                    time: "16:00",
+                                    desc: "地铁6号线  → 文化公园站（A口出）",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconjingdian",
+                                    time: "16:15",
+                                    desc: "游览沙面岛",
+                                    link: "",
+                                    pos: "https://j.map.baidu.com/9a/7xf",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconjingdian",
+                                    time: "17:00",
+                                    desc: "游览上下九步行街",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "17:15",
+                                    desc: "小吃:南信牛奶甜品专家打包（上下九步行街）",
+                                    pos: "https://j.map.baidu.com/5f/wOc",
+                                    link: "http://m.dianping.com/appshare/shop/518986",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "18:00",
+                                    desc: "晚餐:伍湛记(荔湾名食家店)（上下九步行街）",
+                                    pos: "https://j.map.baidu.com/43/MBo",
+                                    link: "http://m.dianping.com/appshare/shop/4685127",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "19:30",
+                                    desc: "回酒店休息",
+                                    link: "",
+                                    pos: "https://j.map.baidu.com/07/Zes",
+                                    pics: null
+                                }
+                            ]
+                        },
+                        {
+                            day: "2020-1-28",
+                            title: "广州",
+                            list: [
+                                {
+                                    type: "iconcanyin",
+                                    time: "09:00",
+                                    desc: "酒店楼下，早餐：老上海混沌铺(巨大创意园店)	",
+                                    pos: "",
+                                    link: "",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconyouleyuan",
+                                    time: "10:00",
+                                    desc: "长隆飞鸟乐园",
+                                    pos: "https://j.map.baidu.com/11/-nt",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconcanyin",
+                                    time: "17:00",
+                                    desc: "晚餐：表哥好味鹅(长隆店)",
+                                    pos: "https://j.map.baidu.com/8f/hec",
+                                    link: "http://m.dianping.com/appshare/shop/4016347",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconicon_xinyong_xianxing_jijin-",
+                                    time: "19:00",
+                                    desc: "回酒店休息",
+                                    link: "",
+                                    pos: "https://j.map.baidu.com/07/Zes",
+                                    pics: null
+                                }
+                            ]
+                        },
+                        {
+                            day: "2020-1-29",
+                            title: "广州->武汉",
+                            list: [
+                                {
+                                    type: "iconcanyin",
+                                    time: "07:30",
+                                    desc: "退房，早餐：老上海混沌铺(巨大创意园店)	",
+                                    pos: "",
+                                    link: "",
+                                    pics: null,
+                                    isdplink: true
+                                },
+                                {
+                                    type: "iconditie",
+                                    time: "8:30",
+                                    desc: "地铁2号线 会江站 → 广州南站",
+                                    link: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "iconhuoche",
+                                    time: "10:44",
+                                    desc: "高铁 G1112 返回武汉",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                },
+                                {
+                                    type: "",
+                                    time: "15:09",
+                                    desc: "抵达武汉站",
+                                    link: "",
+                                    pos: "",
+                                    pics: null
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            methods: {
+                getclass: function (item) {
+                    return item.type
+                },
+                showimg: function (src) {
+                    this.$dialog({
+                        type: "image", //设置弹窗类型为”图片弹窗“
+                        link: src, //点击图片跳转的Url
+                        imgSrc: src //图片Url
+                    });
+                }
+            },
+            mounted: function () {
+
+            }
+        });
+    </script>
+</body>
+</html>
